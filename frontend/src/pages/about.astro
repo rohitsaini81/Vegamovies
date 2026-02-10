@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'About Vegamovies';
+const description = 'Learn about Vegamovies, our mission, and how we curate movie discovery.';
+---
+<BaseLayout title={title} description={description}>
+	<Header currentPath={Astro.url.pathname} />
+	<main class="main">
+		<section style="padding:40px 21px;max-width:900px;margin:0 auto;color:#c4c4c4;">
+			<h1 style="color:#fff;margin-bottom:16px;">About Vegamovies</h1>
+			<p>
+				Vegamovies is a fast, SEO-friendly movie discovery experience built to surface trending,
+				popular, and upcoming titles with rich metadata and clean navigation.
+			</p>
+			<p style="margin-top:12px;">
+				This Astro-powered site renders on the server for performance and search visibility.
+			</p>
+		</section>
+	</main>
+	<Footer />
+</BaseLayout>

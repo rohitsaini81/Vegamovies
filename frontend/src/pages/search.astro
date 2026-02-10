@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import MovieCard from '../components/MovieCard.astro';
+import Pagination from '../components/Pagination.astro';
+import Footer from '../components/Footer.astro';
+import { tmdb } from '../lib/tmdb.js';
+
+const query = Astro.url.searchParams.get('q') ?? '';
+const page = Number(Astro.url.searchParams.get('page') ?? '1');
+
+let videos = { results: [], page: 1, total_pages: 1 };
+if (query) {
+	videos = await tmdb('/search/movie', {
+		page,
+		query,
+		include_adult: false,
+	});
+}
+
+const title = query ? `Search: ${query}` : 'Search Movies';
+const description = query
+	? `Search results for ${query} across movies, ratings, and release dates.`
+	: 'Search for movies by title and discover ratings, release dates, and more.';
+---
+<BaseLayout title={title} description={description}>
+	<Header currentPath={Astro.url.pathname} searchQuery={query} />
+	<main class="main">
+		<h1 class="visually-hidden">Search Movies</h1>
+		<div class="movie">
+			<div class="movie__wrapper">
+				{query ? (
+					videos.results?.length ? (
+						videos.results.map((video) => <MovieCard video={video} />)
+					) : (
+						<p class="movie__empty">No results found for "{query}".</p>
+					)
+				) : (
+					<p class="movie__empty">Search for a movie title to get started.</p>
+				)}
+			</div>
+			{query && <Pagination page={videos.page} totalPages={videos.total_pages} />}
+		</div>
+	</main>
+	<Footer />
+</BaseLayout>

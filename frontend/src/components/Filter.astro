@@ -1,0 +1,56 @@
+---
+const { genres = [], selected = [] } = Astro.props;
+const selectedSet = new Set(selected.map((id) => Number(id)));
+const params = new URLSearchParams(Astro.url.search);
+const basePath = Astro.url.pathname;
+
+const buildGenreUrl = (id) => {
+	const next = new Set(selectedSet);
+	if (next.has(id)) {
+		next.delete(id);
+	} else {
+		next.add(id);
+	}
+	const nextParams = new URLSearchParams(params);
+	if (next.size) {
+		nextParams.set('genres', Array.from(next).join(','));
+	} else {
+		nextParams.delete('genres');
+	}
+	nextParams.delete('page');
+	const query = nextParams.toString();
+	return query ? `${basePath}?${query}` : basePath;
+};
+---
+<div class="filter">
+	<ul>
+		{genres.map((genre) => (
+			<li class={`filter__genre ${selectedSet.has(genre.id) ? 'active' : ''}`}>
+				<a href={buildGenreUrl(genre.id)}>
+					{genre.name}
+					<span class="filter__removeIcon" aria-hidden="true">×</span>
+				</a>
+			</li>
+		))}
+	</ul>
+	<div class="social">
+		<div class="social__buttons">
+			<a href="https://github.com/kkp785216/vegamovie" target="_blank" rel="noreferrer">
+				<span class="social__buttons__icon" aria-hidden="true">◆</span>
+				<span>Github Repo</span>
+			</a>
+		</div>
+		<div class="social__buttons">
+			<a href="https://github.com/kkp785216" target="_blank" rel="noreferrer">
+				<span class="social__buttons__icon" aria-hidden="true">◆</span>
+				<span>Github Profile</span>
+			</a>
+		</div>
+		<div class="social__buttons">
+			<a href="mailto:kkp785216@gmail.com">
+				<span class="social__buttons__icon" aria-hidden="true">◆</span>
+				<span>Contact Me</span>
+			</a>
+		</div>
+	</div>
+</div>

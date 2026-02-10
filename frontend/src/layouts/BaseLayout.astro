@@ -1,0 +1,39 @@
+---
+import '../styles/main.scss';
+
+const {
+	title = 'Vegamovies',
+	description = 'Discover trending, popular, and upcoming movies with Vegamovies. Fast, clean, and SEO-friendly movie discovery.',
+	image = '/assets/img/logo.png',
+	canonical,
+} = Astro.props;
+
+const metaTitle = title === 'Vegamovies' ? title : `${title} | Vegamovies`;
+const canonicalUrl = canonical ?? Astro.url.href;
+const ogImage = image.startsWith('http') ? image : new URL(image, Astro.url.origin).href;
+---
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="icon" href="/favicon.ico" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{metaTitle}</title>
+		<meta name="description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={metaTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={metaTitle} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+		<link rel="canonical" href={canonicalUrl} />
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>

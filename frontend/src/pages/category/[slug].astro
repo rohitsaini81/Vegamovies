@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import MovieCard from '../../components/MovieCard.astro';
+import Pagination from '../../components/Pagination.astro';
+import Footer from '../../components/Footer.astro';
+import { tmdb } from '../../lib/tmdb.js';
+import { slugify } from '../../lib/format.js';
+
+const { slug } = Astro.params;
+const page = Number(Astro.url.searchParams.get('page') ?? '1');
+
+const genreList = await tmdb('/genre/movie/list');
+const genre = genreList.genres?.find((item) => slugify(item.name) === slug);
+
+let videos = { results: [], page: 1, total_pages: 1 };
+if (genre) {
+	videos = await tmdb('/discover/movie', {
+		page,
+		with_genres: genre.id,
+		include_adult: false,
+	});
+}
+
+const title = genre ? `${genre.name} Movies` : 'Category';
+const description = genre
+	? `Browse ${genre.name} movies with ratings and release dates.`
+	: 'Browse movies by category.';
+---
+<BaseLayout title={title} description={description}>
+	<Header currentPath={Astro.url.pathname} />
+	<main class="main">
+		<h1 class="visually-hidden">Movie Category</h1>
+		<div class="movie">
+			<div class="movie__wrapper">
+				{genre ? (
+					videos.results?.map((video) => <MovieCard video={video} />)
+				) : (
+					<p class="movie__empty">We could not find this category.</p>
+				)}
+			</div>
+			{genre && <Pagination page={videos.page} totalPages={videos.total_pages} />}
+		</div>
+	</main>
+	<Footer />
+</BaseLayout>

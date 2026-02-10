@@ -1,0 +1,18 @@
+---
+import { formatDate } from '../lib/format.js';
+const { video } = Astro.props;
+const rating = video?.vote_average ? Number(video.vote_average).toFixed(1) : 'NR';
+const poster = video?.poster_path ? `https://image.tmdb.org/t/p/w300${video.poster_path}` : '/assets/img/logo.png';
+const releaseDate = formatDate(video?.release_date);
+---
+<a href={`/movie?id=${video.id}`} title={video.title} class="media" color="inherit">
+	<span class="MuiBadge-root">
+		<span class="MuiBadge-badge MuiBadge-anchorOriginTopRightRectangle MuiBadge-colorPrimary">{rating}</span>
+	</span>
+	<img class="media__poster" src={poster} alt={video.title} loading="lazy" />
+	<strong class="media__title">{video.title}</strong>
+	<span class="media__subTitle">
+		<span>Movie</span>
+		<span class="media__subTitle">{releaseDate}</span>
+	</span>
+</a>

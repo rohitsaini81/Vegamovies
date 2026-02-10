@@ -10,6 +10,11 @@ body {
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
+img {
+    max-width: 100%;
+    height: auto;
+}
+
 a {
     color: inherit;
     text-decoration: none;
@@ -44,4 +49,22 @@ li {
         scrollbar-width: none;
         /* Firefox */
     }
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.movie__empty {
+    padding: 30px 21px 60px;
+    text-align: center;
+    color: #c4c4c4;
 }

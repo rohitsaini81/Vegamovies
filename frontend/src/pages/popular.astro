@@ -1,33 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
-import Filter from '../components/Filter.astro';
 import MovieCard from '../components/MovieCard.astro';
 import Pagination from '../components/Pagination.astro';
 import Footer from '../components/Footer.astro';
 import { tmdb } from '../lib/tmdb.js';
 
 const page = Number(Astro.url.searchParams.get('page') ?? '1');
-const genresParam = Astro.url.searchParams.get('genres');
-const selectedGenres = genresParam ? genresParam.split(',').map(Number).filter(Boolean) : [];
+const videos = await tmdb('/movie/popular', {
+	page,
+	include_adult: false,
+});
 
-const [videos, genreList] = await Promise.all([
-	tmdb('/discover/movie', {
-		page,
-		with_genres: selectedGenres.join(','),
-		include_adult: false,
-	}),
-	tmdb('/genre/movie/list'),
-]);
-
-const title = 'Home';
-const description = 'Browse the latest movies with curated genres, ratings, and fast search. Discover what to watch next.';
+const title = 'Popular Movies';
+const description = 'Explore popular movies ranked by audience demand and ratings.';
 ---
 <BaseLayout title={title} description={description}>
 	<Header currentPath={Astro.url.pathname} />
-	<Filter genres={genreList.genres} selected={selectedGenres} />
 	<main class="main">
-		<h1 class="visually-hidden">Vegamovies Movies</h1>
+		<h1 class="visually-hidden">Popular Movies</h1>
 		<div class="movie">
 			<div class="movie__wrapper">
 				{videos.results?.map((video) => (

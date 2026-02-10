@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { tmdb } from '../lib/tmdb.js';
+import { formatDate, formatDuration, formatReviewDate, slugify } from '../lib/format.js';
+
+const id = Astro.url.searchParams.get('id');
+let details = null;
+let images = null;
+let credits = null;
+let reviews = null;
+
+if (id) {
+	[details, images, credits, reviews] = await Promise.all([
+		tmdb(`/movie/${id}`),
+		tmdb(`/movie/${id}/images`),
+		tmdb(`/movie/${id}/credits`),
+		tmdb(`/movie/${id}/reviews`),
+	]);
+}
+
+const title = details ? details.title : 'Movie Details';
+const description = details?.overview
+	? details.overview
+	: 'Movie details, screenshots, credits, and reviews in one place.';
+const heroPath = details?.backdrop_path || details?.poster_path;
+const heroImage = heroPath ? `https://image.tmdb.org/t/p/w1280${heroPath}` : '/assets/img/logo.png';
+---
+<BaseLayout title={title} description={description}>
+	<Header currentPath={Astro.url.pathname} />
+	<div class="sinigleMedia">
+		<main class="sinigleMedia__main">
+			{!id || !details ? (
+				<p class="movie__empty">We could not find that movie. Please go back and try another title.</p>
+			) : (
+				<>
+					<img
+						class="sinigleMedia__main__poster"
+						src={heroImage}
+						alt={details.title}
+						loading="eager"
+					/>
+					<h1 class="sinigleMedia__main__heading" title={details.title}>{details.title}</h1>
+					<span class="sinigleMedia__date">
+						<span class="sinigleMedia__date__icon" aria-hidden="true">📅</span>
+						{formatDate(details.release_date)}
+					</span>
+					<div class="sinigleMedia__genre__list">
+						{details.genres?.map((genre) => (
+							<a href={`/category/${slugify(genre.name)}`}>{genre.name}</a>
+						))}
+					</div>
+					{credits?.cast?.length ? (
+						<div class="sinigleMedia__credits__list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;">
+							{credits.cast.slice(0, 12).map((member) => (
+								<div class="sinigleMedia__credits__list__wrapper" title={member.original_name}>
+									<div class="sinigleMedia__credits__img">
+										<img src={`https://image.tmdb.org/t/p/w300${member.profile_path}`} alt={member.original_name} loading="lazy" />
+									</div>
+									<span class="sinigleMedia__credits__title">{member.original_name}</span>
+								</div>
+							))}
+						</div>
+					) : null}
+					{details.imdb_id && (
+						<a href={`https://www.imdb.com/title/${details.imdb_id}`} target="_blank" rel="noreferrer" class="sinigleMedia__imdb">
+							<span aria-hidden="true">▶</span>
+							<span>Watch on IMDB ↗</span>
+						</a>
+					)}
+					<div class="singleMedis__hr"></div>
+					<p class="sinigleMedia__description" style="margin-bottom:27px;">{details.overview}</p>
+					<p class="sinigleMedia__description">
+						<span style="color:#339966;"><strong><a style="color:#339966;" href="/">Vegamovies.nl</a></strong></span> is the best online platform for downloading <span style="color:#339966;"><strong><a style="color:#339966;" href="/category/hollywood">Hollywood</a></strong></span> and <strong><a href="/category/bollywood/"><span style="color:#339966;">Bollywood Movies</span></a></strong>. We provide direct <strong>G-Drive</strong> download link for fast and secure downloading. Click on the download button below and follow the steps to start download.
+					</p>
+					<h5 class="sinigleMedia__date__highlightTitle">
+						All Details About ({new Date(details.release_date).getFullYear()}) '{details.title}' {details.tagline} ~ Vegamovies
+					</h5>
+					<h3 style="color:#fff;margin-bottom:17px;">Movie Info:</h3>
+					<div class="singleMedis__movie__info">
+						<span><strong>Movie Name:</strong> {details.title}</span>
+						<span><strong>Language:</strong> {details.spoken_languages?.map((lang) => lang.english_name).join(', ')}</span>
+						<span><strong>Released Year:</strong> {new Date(details.release_date).getFullYear()}</span>
+						<span><strong>Duration:</strong> {formatDuration(Number(details.runtime))}</span>
+						<span><strong>Rating:</strong> {Number(details.vote_average).toFixed(1)}</span>
+						<span><strong>Rates:</strong> {details.vote_count}</span>
+						<span><strong>Status:</strong> {details.status}</span>
+					</div>
+					<h2 class="sinigleMedia__date__highlightTitle__screenshot">Screenshots:</h2>
+					{images?.backdrops?.slice(0, 5).map((shot) => (
+						<img class="singleMedia__screenshots" src={`https://image.tmdb.org/t/p/w1280${shot.file_path}`} alt={`${details.title} screenshot`} loading="lazy" />
+					))}
+					{reviews?.results?.length ? (
+						<>
+							<h2>{reviews.total_results} comments</h2>
+							<div class="singleMedia__reviews__wrapper">
+								{reviews.results.slice(0, 5).map((review) => (
+									<div class="singleMedia__reviews">
+										<div class="singleMedia__reviews__userIcon" aria-hidden="true">👤</div>
+										<div class="singleMedia__reviews__content">
+											<span class="singleMedia__reviews__userName"><strong>{review.author_details.name || 'Anonymous'}</strong></span>
+											<span class="singleMedia__reviews__date">{formatReviewDate(review.updated_at)}</span>
+											<p class="singleMedia__reviews__reviewText">{review.content}</p>
+										</div>
+									</div>
+								))}
+							</div>
+						</>
+					) : null}
+				</>
+			)}
+		</main>
+	</div>
+	<Footer />
+</BaseLayout>

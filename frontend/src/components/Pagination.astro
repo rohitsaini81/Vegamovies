@@ -1,0 +1,54 @@
+---
+const { page = 1, totalPages = 1 } = Astro.props;
+const current = Number(page) || 1;
+const total = Math.min(Number(totalPages) || 1, 500);
+const params = new URLSearchParams(Astro.url.search);
+const basePath = Astro.url.pathname;
+
+const buildPageUrl = (target) => {
+	const next = new URLSearchParams(params);
+	if (target <= 1) {
+		next.delete('page');
+	} else {
+		next.set('page', String(target));
+	}
+	const query = next.toString();
+	return query ? `${basePath}?${query}` : basePath;
+};
+
+const pages = [];
+if (total > 1) {
+	const include = new Set([1, 2, total - 1, total, current - 1, current, current + 1]);
+	const sorted = Array.from(include)
+		.filter((value) => value >= 1 && value <= total)
+		.sort((a, b) => a - b);
+
+	let last = 0;
+	for (const value of sorted) {
+		if (value - last > 1) pages.push('gap');
+		pages.push(value);
+		last = value;
+	}
+}
+---
+{total > 1 && (
+	<div class="pagination">
+		<ul>
+			<li class={current === 1 ? 'selected' : ''}>
+				<a href={buildPageUrl(Math.max(1, current - 1))} aria-label="Previous page">&lsaquo;</a>
+			</li>
+			{pages.map((item) => (
+				item === 'gap' ? (
+					<li class="break"><a>...</a></li>
+				) : (
+					<li class={current === item ? 'selected' : ''}>
+						<a href={buildPageUrl(item)}>{item}</a>
+					</li>
+				)
+			))}
+			<li class={current === total ? 'selected' : ''}>
+				<a href={buildPageUrl(Math.min(total, current + 1))} aria-label="Next page">&rsaquo;</a>
+			</li>
+		</ul>
+	</div>
+)}

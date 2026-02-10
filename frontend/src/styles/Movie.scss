@@ -1,4 +1,10 @@
 .movie {
+    .movie__empty {
+        padding: 30px 21px 60px;
+        text-align: center;
+        color: #c4c4c4;
+    }
+
     .movie__wrapper {
         display: flex;
         flex-wrap: wrap;
