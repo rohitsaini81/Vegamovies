@@ -1,0 +1,211 @@
+.sinigleMedia {
+    display: flex;
+    flex-wrap: wrap;
+
+    .sinigleMedia__main {
+        width: 100%;
+        max-width: 767px;
+        margin: auto;
+        flex: 0 0 auto;
+        padding: 40px 20px;
+        background-color: #191919;
+        color: #c4c4c4;
+
+        .sinigleMedia__main__poster {
+            border-radius: 10px;
+            margin-bottom: 21px;
+            width: 100%;
+        }
+
+        .sinigleMedia__main__heading {
+            font-size: 30px;
+            color: #fff;
+            text-transform: capitalize;
+        }
+
+        .sinigleMedia__date {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #aeaeae;
+            padding-top: 7px;
+
+            .sinigleMedia__date__icon {
+                font-size: 14px;
+                margin-right: 5px;
+            }
+        }
+
+        .sinigleMedia__genre__list {
+            margin: -4px;
+            padding: 21px 0;
+
+            &>a {
+                padding: 5px 12px;
+                background-color: #3a3a3a;
+                color: #e1e1e1;
+                margin: 4px;
+                display: inline-block;
+                border-radius: 1000px;
+                font-size: 13px;
+
+                &:hover {
+                    background-color: #323232;
+                }
+            }
+        }
+
+        .sinigleMedia__credits__list {
+            .sinigleMedia__credits__list__wrapper{
+                padding: 3px;
+                border-radius: 10px;
+                background-color: #424242;
+                .sinigleMedia__credits__img{
+                    position: relative;
+                    width: 100%;
+                    img{
+                        width: 100%;
+                        border-radius: 10px;
+                        &::before{
+                            content: "";
+                            background-color: #686868;
+                            position: absolute;
+                            top: 0;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            border-radius: 10px;
+                        }
+                    }
+                }
+                .sinigleMedia__credits__title{
+                    padding: 2px;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                    font-weight: 600;
+                    text-align: center;
+                    margin-top: 3px;
+                }
+            }
+        }
+
+        .sinigleMedia__imdb{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            background-color: #f5c518;
+            color: black;
+            cursor: pointer;
+            padding: 5px 12px;
+            border-radius: 5px;
+            margin-top: 23px;
+            
+            &:hover{
+                background-color: #e6b400;
+                span{
+                    text-decoration: underline;
+                }
+            }
+
+            svg{
+                margin: 0 12px;
+            }
+
+            span{
+                margin: auto;
+                display: block;
+                font-size: 15px;
+                font-weight: 600;
+            }
+        }
+
+        .singleMedis__hr {
+            width: 100%;
+            height: 1px;
+            background-color: #ffffff1a;
+            margin: 37px 0;
+        }
+
+        .sinigleMedia__description {
+            line-height: 27px;
+        }
+
+        .sinigleMedia__date__highlightTitle {
+            text-align: center;
+            font-weight: 700;
+            font-size: 21px;
+            color: #00ffff;
+            margin: 11px 0;
+            text-transform: capitalize;
+        }
+
+        .singleMedis__movie__info {
+            &>* {
+                display: block;
+                margin-bottom: 5px;
+            }
+        }
+
+        .sinigleMedia__date__highlightTitle__screenshot {
+            text-align: center;
+            font-size: 27px;
+            color: #00ffff;
+            margin: 11px 0;
+            margin-bottom: 17px;
+            font-weight: 500;
+        }
+
+        .singleMedia__screenshots {
+            width: 100%;
+        }
+
+        .singleMedia__screenshots__seeMoreBtn {
+            display: block;
+            width: fit-content;
+            outline: none;
+            border: none;
+            background: none;
+            font-size: 15px;
+            color: #8f8fc3;
+            text-decoration: underline;
+            cursor: pointer;
+            margin: 17px auto;
+        }
+
+        .singleMedia__reviews__wrapper{
+            margin-top: 23px;
+            .singleMedia__reviews{
+                display: flex;
+                margin-bottom: 27px;
+
+                &:last-child{
+                    margin-bottom: 0;
+                }
+                .singleMedia__reviews__userIcon{
+                    margin-right: 7px;
+                    width: 38px;
+                    height: 38px;
+                }
+                .singleMedia__reviews__content{
+                    .singleMedia__reviews__userName{
+                        display: block;
+                    }
+                    .singleMedia__reviews__date{
+                        display: block;
+                        color: grey;
+                        font-size: 12px;
+                        font-weight: 600;
+                        padding-top: 5px;
+                        padding-bottom: 13px;
+                    }
+                    .singleMedia__reviews__reviewText{
+                        font-size: 15px;
+                        line-height: 23px;
+                    }
+                }
+            }
+        }
+    }
+}
