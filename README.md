@@ -67,8 +67,9 @@ npm run start
 
 Each project is deployed independently.
 
-- Frontend deployment: project root `frontend`, install command `npm install`, build command `npm run build`.
-- Admin deployment: project root `admin`, install command `npm install`, build command `npm run build`.
+
+- Set project root to `frontend` for the Astro application deployment.
+- Set project root to `admin` for the Next.js admin deployment.
 
 ## Credits
 
