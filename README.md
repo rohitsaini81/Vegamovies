@@ -67,6 +67,7 @@ npm run start
 
 Each project is deployed independently.
 
+
 - Set project root to `frontend` for the Astro application deployment.
 - Set project root to `admin` for the Next.js admin deployment.
 
